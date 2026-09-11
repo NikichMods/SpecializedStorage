@@ -34,7 +34,7 @@ No configuration is required.
 
 ## Installation
 
-Copy `SpecializedStorage.dll` into:
+Copy `Specialized Storage 1.2.0.dll` into:
 
 `Graveyard Keeper/BepInEx/plugins/`
 
@@ -44,7 +44,7 @@ The mod does not add custom save data. Existing stacks above the vanilla limit m
 
 ## Status
 
-Current test build: **1.2.0**.
+Current stable version: **1.2.0**.
 
 ## Development
 

@@ -8,11 +8,13 @@
     <Optimize>true</Optimize>
     <DebugType>none</DebugType>
     <Deterministic>true</Deterministic>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="src\*.cs" />
     <EmbeddedResource Include="resources\stack-marker.pixels">
       <LogicalName>SpecializedStorage.Resources.StackMarker.pixels</LogicalName>
     </EmbeddedResource>

@@ -1,13 +1,12 @@
 # Changelog
 
-Only accepted user-facing releases are listed as stable. The current 1.2.0 entry remains a candidate until acceptance.
+Only accepted user-facing releases are listed here.
 
-## 1.2.0 — public build migration candidate
+## 1.2.0 — 2026-09-11
 
-- Moves the accepted Specialized Storage implementation into the clean public repository.
-- Replaces private checked-in game assembly references with minimal compile-time API reference stubs.
-- Advances the version because the resulting DLL is a new binary and the accepted 1.1.0 artifact is immutable.
-- No intentional changes to storage classification, stack limits, marker appearance/position, input behavior, save behavior, or Quick Stack compatibility.
+- Migrated Specialized Storage into the clean public repository.
+- Replaced private checked-in game assembly references with minimal compile-time API reference stubs.
+- Preserved the accepted 1.1.0 runtime behavior: storage classification, stack limits, marker appearance/position, input behavior, save behavior, and Quick Stack compatibility.
 
 ## 1.1.0 — 2026-08-18
 

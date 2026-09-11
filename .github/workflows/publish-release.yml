@@ -78,7 +78,7 @@ jobs:
           cat > release-notes.md <<EOF
           Stable accepted release.
 
-          SHA-256: `${{ steps.release.outputs.sha256 }}`
+          SHA-256: ${{ steps.release.outputs.sha256 }}
           EOF
 
           gh release create "$tag" "$asset" \

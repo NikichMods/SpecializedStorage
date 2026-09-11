@@ -24,9 +24,13 @@ A later repository-normalization CI build from unchanged production source/proje
 - **Runtime changes intended:** none.
 - **Version change:** 1.1.0 → 1.2.0 because the clean public build produces a new binary and 1.1.0 is immutable.
 - **Production behavior preserved:** storage IDs/classification, stack multiplier/cap, legacy-overstack handling, recipe-derived suitability cache, stack normalization/temporary override behavior, marker pixels/layout/depth, Quick Stack scope, and Harmony patch targets.
-- **Build architecture change:** package references plus minimal compile-time `Assembly-CSharp` / `Assembly-CSharp-firstpass` API reference projects under `references/`; reference-stub DLLs are compile-only and must never be shipped.
+- **Build architecture change:** package references plus minimal compile-time `Assembly-CSharp` / `Assembly-CSharp-firstpass` API reference projects under `references/`; reference-stub DLLs are compile-only and are not shipped.
 - **Verified legacy assembly identities:** `Assembly-CSharp` version `11.0.0.0`; `Assembly-CSharp-firstpass` version `0.0.0.0`.
 - **Verified API constants used by production:** BagType Alchemy=2, Potions=6, Food=8; ItemType Preach=20, BodyUniversalPart=270; CraftType MixedCraft=3, AlchemyDecompose=5; UIWidget.Pivot.BottomLeft=6.
-- **Candidate source/build:** pending.
-- **Requested smoke test after a clean build:** plugin loads without BepInEx errors; open a specialized storage; suitable stackable item shows the marker and can merge/transfer above its vanilla limit; an unsupported item remains vanilla-limited.
-- **Result:** **pending build**.
+- **Initial public build:** run `34616727882` compiled but was rejected before handoff because SDK default compile-item discovery also compiled reference-stub source into the production assembly.
+- **Corrected candidate source commit:** `dc8d3b1209510d0c57afa4d2bcd0382f56091332`; frozen as `candidate/1.2.0`.
+- **Corrected CI:** run `34617065129` succeeded with 0 warnings / 0 errors; artifact `SpecializedStorage-1.2.0` (`10270612472`).
+- **Package-boundary verification:** `SpecializedStorage.dll` is the only shipped DLL; compile-only `Assembly-CSharp.dll` / `Assembly-CSharp-firstpass.dll` are not copied to output. Production compile items are explicitly limited to `src/*.cs`, so API stub source is not compiled into the mod. Post-build inspection confirms external `Assembly-CSharp` / `Assembly-CSharp-firstpass` references remain in the production DLL.
+- **Candidate DLL:** 30,208 bytes; SHA-256 `1b30927d74a8787c00eccede0dc2fe5b735de66d8543f2f79e45820faf353599`.
+- **Requested smoke test:** plugin loads without BepInEx errors; open a specialized storage; a suitable stackable item shows the three-bar marker and can merge/transfer above its vanilla limit; an unsupported item remains vanilla-limited. If convenient, also verify mouse/gamepad interaction is unchanged.
+- **Result:** **clean candidate ready for in-game smoke test**.

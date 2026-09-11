@@ -18,7 +18,7 @@ This file records numbered binaries and the evidence used to accept or reject th
 
 A later repository-normalization CI build from unchanged production source/project/resource succeeded at legacy run `33955208231`, commit `e1448f18720ca678fd53ca26ccfc92bf5223c0f3`, but produced different compiler bytes (SHA-256 `ffb0c608c5093434ef177a6eb938dfbb14de3bef7f9471c2df5444988e06ff84`). That did not replace the exact player-tested 1.1.0 binary.
 
-## 1.2.0 — clean public build/reference migration candidate
+## 1.2.0 — clean public build/reference migration
 
 - **Goal:** reproduce accepted 1.1.0 gameplay behavior from a clean public repository without checked-in game assemblies.
 - **Runtime changes intended:** none.
@@ -28,9 +28,9 @@ A later repository-normalization CI build from unchanged production source/proje
 - **Verified legacy assembly identities:** `Assembly-CSharp` version `11.0.0.0`; `Assembly-CSharp-firstpass` version `0.0.0.0`.
 - **Verified API constants used by production:** BagType Alchemy=2, Potions=6, Food=8; ItemType Preach=20, BodyUniversalPart=270; CraftType MixedCraft=3, AlchemyDecompose=5; UIWidget.Pivot.BottomLeft=6.
 - **Initial public build:** run `34616727882` compiled but was rejected before handoff because SDK default compile-item discovery also compiled reference-stub source into the production assembly.
-- **Corrected candidate source commit:** `dc8d3b1209510d0c57afa4d2bcd0382f56091332`; frozen as `candidate/1.2.0`.
-- **Corrected CI:** run `34617065129` succeeded with 0 warnings / 0 errors; artifact `SpecializedStorage-1.2.0` (`10270612472`).
+- **Accepted source commit:** `dc8d3b1209510d0c57afa4d2bcd0382f56091332`; frozen as `candidate/1.2.0` and `baseline/1.2.0-accepted`.
+- **Accepted CI:** run `34617065129` succeeded with 0 warnings / 0 errors; artifact `SpecializedStorage-1.2.0` (`10270612472`).
 - **Package-boundary verification:** `SpecializedStorage.dll` is the only shipped DLL; compile-only `Assembly-CSharp.dll` / `Assembly-CSharp-firstpass.dll` are not copied to output. Production compile items are explicitly limited to `src/*.cs`, so API stub source is not compiled into the mod. Post-build inspection confirms external `Assembly-CSharp` / `Assembly-CSharp-firstpass` references remain in the production DLL.
-- **Candidate DLL:** 30,208 bytes; SHA-256 `1b30927d74a8787c00eccede0dc2fe5b735de66d8543f2f79e45820faf353599`.
-- **Requested smoke test:** plugin loads without BepInEx errors; open a specialized storage; a suitable stackable item shows the three-bar marker and can merge/transfer above its vanilla limit; an unsupported item remains vanilla-limited. If convenient, also verify mouse/gamepad interaction is unchanged.
-- **Result:** **clean candidate ready for in-game smoke test**.
+- **Accepted DLL:** 30,208 bytes; SHA-256 `1b30927d74a8787c00eccede0dc2fe5b735de66d8543f2f79e45820faf353599`.
+- **In-game result (2026-09-11):** user confirmed that the mod looked and worked correctly. The supplied game log shows `Specialized Storage 1.2.0 loaded` and a successful suitability-cache build (`definitions=1157`, `alchemy=135`, `kitchen=225`, `crafts=2102`, `time_ms=35`) with no Specialized Storage-tagged warnings or errors.
+- **Result:** **accepted stable release**.

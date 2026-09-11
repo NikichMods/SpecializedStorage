@@ -1,0 +1,87 @@
+name: Build Specialized Storage
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev/1.2.0
+    paths:
+      - 'src/**'
+      - 'references/**'
+      - 'resources/**'
+      - 'SpecializedStorage.csproj'
+      - 'nuget.config'
+      - '.github/workflows/build.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: specialized-storage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read mod version
+        id: version
+        shell: pwsh
+        run: |
+          $source = Get-Content 'src/Core.cs' -Raw
+          if ($source -notmatch 'PluginVersion\s*=\s*"([^"]+)"') {
+            throw 'Could not read PluginVersion from src/Core.cs'
+          }
+          $version = $Matches[1]
+          "version=$version" >> $env:GITHUB_OUTPUT
+          Write-Host "Building Specialized Storage $version"
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore SpecializedStorage.csproj --configfile nuget.config
+
+      - name: Build Release DLL
+        run: dotnet build SpecializedStorage.csproj -c Release --no-restore --nologo
+
+      - name: Verify package boundary
+        shell: pwsh
+        run: |
+          $dll = 'bin/Release/SpecializedStorage.dll'
+          if (!(Test-Path $dll)) {
+            throw "Expected DLL not found: $dll"
+          }
+          if (Test-Path 'bin/Release/Assembly-CSharp.dll') {
+            throw 'Compile-time Assembly-CSharp stub leaked into the mod output.'
+          }
+          if (Test-Path 'bin/Release/Assembly-CSharp-firstpass.dll') {
+            throw 'Compile-time Assembly-CSharp-firstpass stub leaked into the mod output.'
+          }
+
+      - name: Prepare versioned artifact
+        id: package
+        shell: pwsh
+        run: |
+          $source = 'bin/Release/SpecializedStorage.dll'
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          $target = "artifacts/Specialized Storage ${{ steps.version.outputs.version }}.dll"
+          Copy-Item $source $target
+          $hash = (Get-FileHash $target -Algorithm SHA256).Hash.ToLowerInvariant()
+          Write-Host "Built $target"
+          Write-Host "SHA-256: $hash"
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+
+      - name: Upload versioned DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpecializedStorage-${{ steps.version.outputs.version }}
+          path: artifacts/Specialized Storage ${{ steps.version.outputs.version }}.dll
+          if-no-files-found: error
+          retention-days: 7

@@ -2,16 +2,6 @@ name: Build Specialized Storage
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - dev/1.2.0
-    paths:
-      - 'src/**'
-      - 'references/**'
-      - 'resources/**'
-      - 'SpecializedStorage.csproj'
-      - 'nuget.config'
-      - '.github/workflows/build.yml'
 
 permissions:
   contents: read

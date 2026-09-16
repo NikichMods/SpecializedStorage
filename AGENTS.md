@@ -46,7 +46,8 @@ The public project uses hand-authored minimal compile-time API reference project
 - `docs/TEST_BUILD_LOG.md` is the durable build/test record.
 - Public stable binaries are published through GitHub Releases after acceptance.
 - Candidate/test binaries remain Actions artifacts.
-- The user prefers a ready raw, versioned DLL, not a ZIP.
+- Candidate/test handoff uses a ready raw, versioned DLL so the exact build is obvious.
+- The installed public payload uses the stable canonical filename `SpecializedStorage.dll`; a surrounding archive/store entry may carry the version.
 
 ## CI policy
 

@@ -34,9 +34,11 @@ No configuration is required.
 
 ## Installation
 
-Copy `SpecializedStorage.dll` into:
+Copy the mod DLL into:
 
 `Graveyard Keeper/BepInEx/plugins/`
+
+The installed file should be named `SpecializedStorage.dll` so future updates replace the same plugin file instead of leaving multiple versioned copies side by side.
 
 ## Uninstalling
 

@@ -30,7 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           manifest='release/accepted.json'
-          for key in version tag title source_sha run_id artifact_name asset_name sha256; do
+          for key in version tag title source_sha run_id artifact_name asset_name installed_asset_name sha256; do
             value="$(jq -r --arg key "$key" '.[$key]' "$manifest")"
             if [ -z "$value" ] || [ "$value" = "null" ]; then
               echo "Missing release manifest field: $key" >&2
@@ -48,41 +48,70 @@ jobs:
           repository: ${{ github.repository }}
           run-id: ${{ steps.release.outputs.run_id }}
 
-      - name: Verify accepted binary
+      - name: Verify accepted binary and prepare installed payload
         shell: bash
         run: |
           set -euo pipefail
-          asset="release-asset/${{ steps.release.outputs.asset_name }}"
-          test -f "$asset"
-          actual="$(sha256sum "$asset" | awk '{print $1}')"
+          source="release-asset/${{ steps.release.outputs.asset_name }}"
+          target="release-asset/${{ steps.release.outputs.installed_asset_name }}"
+          test -f "$source"
+
+          actual="$(sha256sum "$source" | awk '{print $1}')"
           expected='${{ steps.release.outputs.sha256 }}'
           if [ "$actual" != "$expected" ]; then
             echo "SHA-256 mismatch: expected $expected, got $actual" >&2
             exit 1
           fi
 
-      - name: Publish GitHub Release
+          cp "$source" "$target"
+          copied="$(sha256sum "$target" | awk '{print $1}')"
+          if [ "$copied" != "$expected" ]; then
+            echo "Canonical payload SHA-256 mismatch after filename-only copy." >&2
+            exit 1
+          fi
+
+      - name: Prepare release notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > release-notes.md <<EOF
+          Stable release of Specialized Storage ${{ steps.release.outputs.version }}.
+
+          SHA-256: `${{ steps.release.outputs.sha256 }}`
+          EOF
+
+      - name: Publish or repair GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           tag='${{ steps.release.outputs.tag }}'
-          asset="release-asset/${{ steps.release.outputs.asset_name }}"
+          title='${{ steps.release.outputs.title }}'
+          target_sha='${{ steps.release.outputs.source_sha }}'
+          installed_name='${{ steps.release.outputs.installed_asset_name }}'
+          asset="release-asset/$installed_name"
 
           if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo "Release $tag already exists; leaving it unchanged."
-            exit 0
+            gh release edit "$tag" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$target_sha" \
+              --title "$title" \
+              --notes-file release-notes.md
+
+            gh release upload "$tag" "$asset" \
+              --repo "$GITHUB_REPOSITORY" \
+              --clobber
+
+            while IFS= read -r old_asset; do
+              if [ -n "$old_asset" ] && [ "$old_asset" != "$installed_name" ] && [[ "$old_asset" == *.dll ]]; then
+                gh release delete-asset "$tag" "$old_asset" --repo "$GITHUB_REPOSITORY" --yes
+              fi
+            done < <(gh release view "$tag" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name')
+          else
+            gh release create "$tag" "$asset" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$target_sha" \
+              --title "$title" \
+              --notes-file release-notes.md
           fi
-
-          cat > release-notes.md <<EOF
-          Stable accepted release.
-
-          SHA-256: ${{ steps.release.outputs.sha256 }}
-          EOF
-
-          gh release create "$tag" "$asset" \
-            --repo "$GITHUB_REPOSITORY" \
-            --target '${{ steps.release.outputs.source_sha }}' \
-            --title '${{ steps.release.outputs.title }}' \
-            --notes-file release-notes.md

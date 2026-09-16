@@ -2,6 +2,7 @@
   "version": "1.2.0",
   "tag": "v1.2.0",
   "title": "Specialized Storage 1.2.0",
+  "release_notes": "Stable release of Specialized Storage 1.2.0.",
   "source_sha": "dc8d3b1209510d0c57afa4d2bcd0382f56091332",
   "run_id": "34617065129",
   "artifact_name": "SpecializedStorage-1.2.0",

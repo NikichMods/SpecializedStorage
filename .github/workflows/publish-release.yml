@@ -30,7 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           manifest='release/accepted.json'
-          for key in version tag title source_sha run_id artifact_name asset_name installed_asset_name sha256; do
+          for key in version tag title release_notes source_sha run_id artifact_name asset_name installed_asset_name sha256; do
             value="$(jq -r --arg key "$key" '.[$key]' "$manifest")"
             if [ -z "$value" ] || [ "$value" = "null" ]; then
               echo "Missing release manifest field: $key" >&2
@@ -71,14 +71,13 @@ jobs:
           fi
 
       - name: Prepare release notes
+        env:
+          RELEASE_NOTES: ${{ steps.release.outputs.release_notes }}
+          ACCEPTED_SHA256: ${{ steps.release.outputs.sha256 }}
         shell: bash
         run: |
           set -euo pipefail
-          cat > release-notes.md <<EOF
-          Stable release of Specialized Storage ${{ steps.release.outputs.version }}.
-
-          SHA-256: `${{ steps.release.outputs.sha256 }}`
-          EOF
+          printf '%s\n\nSHA-256: %s\n' "$RELEASE_NOTES" "$ACCEPTED_SHA256" > release-notes.md
 
       - name: Publish or repair GitHub Release
         env:

@@ -60,6 +60,6 @@ Follow `DevRules/CI_POLICY.md` and `DevRules/GIT_WORKFLOW.md`.
 
 ## Long-lived sources of truth
 
-Use `README.md`, `CHANGELOG.md`, `docs/MIGRATION_PROVENANCE.md`, `docs/TEST_BUILD_LOG.md`, `references/README.md`, canonical production source/project files, and current public history. Historical pre-public evidence remains available in `666drjekyll666-cloud/SpecializedStorage-legacy-private`.
+Use `README.md`, `CHANGELOG.md`, `docs/MIGRATION_PROVENANCE.md`, `docs/TEST_BUILD_LOG.md`, `docs/POST_AUDIT_RESEARCH_2026-09-19.md`, `references/README.md`, canonical production source/project files, and current public history. Historical pre-public evidence remains available in `666drjekyll666-cloud/SpecializedStorage-legacy-private`.
 
 When chat memory conflicts with accepted repository evidence, investigate the conflict before changing code.

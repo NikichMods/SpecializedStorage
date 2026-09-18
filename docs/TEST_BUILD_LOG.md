@@ -34,3 +34,17 @@ A later repository-normalization CI build from unchanged production source/proje
 - **Accepted DLL:** 30,208 bytes; SHA-256 `1b30927d74a8787c00eccede0dc2fe5b735de66d8543f2f79e45820faf353599`.
 - **In-game result (2026-09-11):** user confirmed that the mod looked and worked correctly. The supplied game log shows `Specialized Storage 1.2.0 loaded` and a successful suitability-cache build (`definitions=1157`, `alchemy=135`, `kitchen=225`, `crafts=2102`, `time_ms=35`) with no Specialized Storage-tagged warnings or errors.
 - **Result:** **accepted stable release**.
+
+
+## Post-audit engineering review — 2026-09-19
+
+- **Trigger:** general mod audit flagged the shared `ItemDefinition.stack_count` projection and persistent over-vanilla `Item.value` as architectural/save-safety questions requiring focused research.
+- **Research result:** native 1.407 move/add ownership was traced; no narrower safe destination-specific stack seam was verified.
+- **Restoration/re-entrancy:** finalizer/depth design is consistent with observed nested manual/Quick Stack runtime behavior and restores projected definitions.
+- **Uninstall/save evidence:** prior user test confirmed over-vanilla stacks can load and remain usable without the DLL, can be partially removed, can be redistributed by vanilla on add-back, and can survive another save/reload without the mod.
+- **Normalization evidence:** public 1.407 decompile shows vanilla stackable merge/capacity semantics are ID-based, matching `NormalizeExistingStacks`.
+- **Quick Stack:** existing-item quick stacking with specialized limits is repeatedly runtime-proven; absence of a representative destination stack correctly results in no Quick Stack transfer.
+- **Performance:** no recurring hot-path defect established; suitability-cache construction remains one-time/lazy (~35 ms in accepted runtime evidence).
+- **Final verdict:** **KEEP CURRENT IMPLEMENTATION**.
+- **Production impact:** none. No runtime source change, build, version bump, artifact, accepted-ref movement, or release replacement.
+- **Durable analysis:** `docs/POST_AUDIT_RESEARCH_2026-09-19.md`.

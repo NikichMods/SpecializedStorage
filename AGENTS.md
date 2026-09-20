@@ -1,12 +1,12 @@
 # Specialized Storage — Project Rules
 
-The global engineering baseline for this repository is `666drjekyll666-cloud/DevRules`. Before substantive implementation, read `ENGINEERING_RULES.md`, `CI_POLICY.md`, `GIT_WORKFLOW.md`, and `PROJECT_BOOTSTRAP.md` there. This file contains only project-specific additions and explicit exceptions.
+The global engineering baseline for this repository is `NikichMods/DevRules`. Before substantive implementation, read `ENGINEERING_RULES.md`, `CI_POLICY.md`, `GIT_WORKFLOW.md`, and `PROJECT_BOOTSTRAP.md` there. This file contains only project-specific additions and explicit exceptions.
 
 ## Project identity and scope
 
 - Public project: **Specialized Storage**.
 - Game: `Graveyard Keeper 1.407`.
-- Repository: `666drjekyll666-cloud/SpecializedStorage`.
+- Repository: `NikichMods/SpecializedStorage`.
 - Canonical project: `SpecializedStorage.csproj`.
 - Runtime source: `src/`.
 - Stable BepInEx GUID: `nikich.graveyardkeeper.specializedstorage`.
@@ -60,6 +60,6 @@ Follow `DevRules/CI_POLICY.md` and `DevRules/GIT_WORKFLOW.md`.
 
 ## Long-lived sources of truth
 
-Use `README.md`, `CHANGELOG.md`, `docs/MIGRATION_PROVENANCE.md`, `docs/TEST_BUILD_LOG.md`, `docs/POST_AUDIT_RESEARCH_2026-09-19.md`, `references/README.md`, canonical production source/project files, and current public history. Historical pre-public evidence remains available in `666drjekyll666-cloud/SpecializedStorage-legacy-private`.
+Use `README.md`, `CHANGELOG.md`, `docs/MIGRATION_PROVENANCE.md`, `docs/TEST_BUILD_LOG.md`, `docs/POST_AUDIT_RESEARCH_2026-09-19.md`, `references/README.md`, canonical production source/project files, and current public history. Historical pre-public evidence remains available in `NikichMods/SpecializedStorage-legacy-private`.
 
 When chat memory conflicts with accepted repository evidence, investigate the conflict before changing code.

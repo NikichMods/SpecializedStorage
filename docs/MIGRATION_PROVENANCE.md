@@ -2,7 +2,7 @@
 
 ## Accepted legacy source
 
-- Private legacy repository: `666drjekyll666-cloud/SpecializedStorage-legacy-private`
+- Private legacy repository: `NikichMods/SpecializedStorage-legacy-private`
 - Accepted legacy version: **1.1.0**
 - Accepted source tag: `v1.1.0`
 - Accepted source commit: `1bb576af395a269d1d4e1a584a68fa13e1c12eb3`

@@ -53,7 +53,7 @@ The public project uses hand-authored minimal compile-time API reference project
 
 Follow `DevRules/CI_POLICY.md` and `DevRules/GIT_WORKFLOW.md`.
 
-- Hosted CI is used at coherent candidate/handoff boundaries, not for routine documentation/bookkeeping.
+- Code-bearing pull requests to `main` build automatically with path filters and `cancel-in-progress`; `workflow_dispatch` remains available for ad-hoc or handoff rebuilds. Routine documentation/bookkeeping does not trigger the build.
 - A clean Release build is required before a new DLL is handed to the user.
 - The current public reference-stub build path must be proven before it replaces the legacy private-reference build path.
 - After acceptance, publish the exact tested artifact to GitHub Releases; do not rebuild different bytes under the same version.
